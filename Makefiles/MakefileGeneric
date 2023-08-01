@@ -1,41 +1,3 @@
-# == MODELSIM ALIAS ==
-ifeq ($(SEL_STATION), VM)
-# Virtual Machines PATH
-  vsim=/opt/intelFPGA/18.1/modelsim_ase/bin/vsim
-  vlib=/opt/intelFPGA/18.1/modelsim_ase/linuxaloem/vlib
-  vmap=/opt/intelFPGA/18.1/modelsim_ase/linuxaloem/vmap
-  vcom=/opt/intelFPGA/18.1/modelsim_ase/linuxaloem/vcom
-  vlog=/opt/intelFPGA/18.1/modelsim_ase/linuxaloem/vlog
-else ifeq ($(SEL_STATION), LINUX)
-# Linux Path
-  vsim=/opt/Modelsim/modelsim_ase/bin/vsim
-  vlib=/opt/Modelsim/modelsim_ase/linuxaloem/vlib
-  vmap=/opt/Modelsim/modelsim_ase/linuxaloem/vmap
-  vcom=/opt/Modelsim/modelsim_ase/linuxaloem/vcom
-  vlog=/opt/Modelsim/modelsim_ase/linuxaloem/vlog
-endif
-# ====================
-
-# == GENERIC TESTBENCH SOURCES DIRECTORY ==
-ifeq ($(SEL_STATION), VM)
-  GENERIC_TB_VHD_SRC_DIR=~/Documents/GitHub/VHDL_code/Testbench
-  GENERIC_TB_SRC_DIR=~/Documents/GitHub/Verilog/Testbench/sources
-  GENERIC_TB_CLASS_SRC_DIR=~/Documents/GitHub/Verilog/Testbench/sources
-  TB_UART_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_uart
-  TB_DATA_COLLECTOR_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_data_collector
-  TB_DATA_CHECKER_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_data_checker
-  TB_MASTER_AXI4LITE_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_axi4lite
-else ifeq ($(SEL_STATION), LINUX)
-  GENERIC_TB_VHD_SRC_DIR=~/Documents/GitHub/VHDL_code/Testbench
-  GENERIC_TB_SRC_DIR=~/Documents/GitHub/Verilog/Testbench/sources
-  GENERIC_TB_CLASS_SRC_DIR=~/Documents/GitHub/Verilog/Testbench/sources
-  TB_UART_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_uart
-  TB_DATA_COLLECTOR_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_data_collector
-  TB_DATA_CHECKER_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_data_checker
-  TB_MASTER_AXI4LITE_SRC_V_DIR=~/Documents/GitHub/Verilog/Testbench/sources/lib_tb_axi4lite
-endif
-# =========================================
-
 # == TESTBENCH SPECIFIC SOURCES DIRECTORY ==
 TB_SRC_DIR=$(ROOT)/tb_sources
 # ==========================================
@@ -101,51 +63,13 @@ endif
 # ======================
 
 
-# ==== GENERIC TB FILES ====
-# -- Current TB Files --
-src_gen_tb_v+=$(GENERIC_TB_CLASS_SRC_DIR)/lib_tb_wait_event/tb_wait_event_class.sv
-src_gen_tb_v+=$(GENERIC_TB_CLASS_SRC_DIR)/lib_tb_check_level/tb_check_level_class.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_wait_event/wait_event_intf.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_wait_event/wait_event_tb.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_wait_event/wait_event_wrapper.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_wait_event/wait_event.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_set_injector/set_injector_intf.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_set_injector/set_injector_tb.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_set_injector/set_injector.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_set_injector/set_injector_wrapper.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_wait_event/wait_duration_intf.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_wait_event/wait_duration.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_wait_event/wait_duration_wrapper.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_check_level/check_level_intf.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_check_level/check_level.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_check_level/check_level_wrapper.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_axi4/master_axi4lite_intf.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_axi4/tb_master_axi4lite_class.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_sequencer/tb_modules_custom_class.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_sequencer/tb_tasks.sv
-src_gen_tb_v+=$(GENERIC_TB_SRC_DIR)/lib_tb_utils/tb_utils_class.sv
 
-# -- CUSTOM TB Files --
-# -- UART TB MODULES --
-
-# -- DATA COLLECTOR V FILES LIST --
-src_tb_data_collector_v+=$(TB_DATA_COLLECTOR_SRC_V_DIR)/data_collector.sv
-src_tb_data_collector_v+=$(TB_DATA_COLLECTOR_SRC_V_DIR)/tb_data_collector_class.sv
-
-# -- DATA CHECKER V FILES LIST ==
-src_tb_data_checker_v+=$(TB_DATA_CHECKER_SRC_V_DIR)/data_checker.sv
-src_tb_data_checker_v+=$(TB_DATA_CHECKER_SRC_V_DIR)/tb_data_checker_class.sv
-
-# -- Code Coverage TB Files --
-src_code_cov_tb_vhd+=$(GENERIC_TB_VHD_SRC_DIR)/lib_code_coverage/pkg_code_coverage.vhd
-src_code_cov_tb_vhd+=$(GENERIC_TB_VHD_SRC_DIR)/lib_code_coverage/code_coverage_injector.vhd
-# ===========================
 
 print_generic_rules:
 	@echo "== GenericMakefile rules =="
 	@echo ""
 	@echo "- Create HDL Temporary Directories :"
-	@echo "make create_project_dir"
+	@echo "make create_simulation_dir"
 	@echo ""
 	@echo "- Clean WORK directory :"
 	@echo "make clean_work"
@@ -241,7 +165,7 @@ create_work:
 	  mkdir $(WORK_DIR); \
 	fi
 
-create_project_dir: create_temp_project create_temp_dir create_work
+create_simulation_dir: create_temp_project create_temp_dir create_work
 # ======================
 
 # == REMOVE TEMP. DIR ==
@@ -304,7 +228,7 @@ compile_design_v_files:
 
 # == COMPILE ALL ==
 # compile_design and compile_testbench rules must be define in user Makefile
-compile_all : clean_all create_project_dir libs compile_design compile_testbench
+compile_all : clean_all create_simulation_dir libs compile_design compile_testbench
 	make print_compile_logs_file
 # =================
 
@@ -316,7 +240,6 @@ compile_all : clean_all create_project_dir libs compile_design compile_testbench
 # $(TRANSCRIPT_ARGS) Transcript arguement if enabled
 # $(VSIM_G_ARGS) Testbench Generic Arg. changed (Scenario)
 # $(RUN_ARGS) add do file to run here
-
 run_test: generate_scn
 	cd $(HDL_SIMU_PATH)/$(PROJECT_NAME)/$(WORK_DIR); \
 	$(vsim) $(VSIM_ARGS) $(TB_LIB_TOP) $(LIB_ARGS) $(TRANSCRIPT_ARGS) $(VSIM_G_ARGS) $(RUN_ARGS)
@@ -399,16 +322,3 @@ print_test:
 	@ls $(TEST_LIST) | grep [a-zA-Z0-9_]*.py$
 	
 # ===================================
-
-
-# == Add Color ==
-# $(RED)="\031[32m"
-# $(GREEN)="\033[32m"
-# $(BLUE)="\034[32m"
-# ===============
-
-# $(ERROR_to_RED)='/Errors/s//`printf "\033[31mErrors\033[0m"`/'
-# $(WARNING_to_CYAN)='/Warnings/s//`printf "\033[36mWarnings\033[0m"`/'
-# $(VCOM_to_BLUE)'/vcom/s//`printf "\033[34mvcom\033[0m"`/'
-
-#
