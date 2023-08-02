@@ -1,0 +1,119 @@
+# ========================================== #
+#
+# Makefile for 
+#
+# ========================================== #
+# Author  : 
+# Date    : 
+# Version : 1.0
+#         -
+# ========================================== #
+
+# -- INCLUDES --
+include ~/Generics_Makefiles/Makefiles/MakefileGeneric
+include ~/RTL_Testbench/scripts/makefiles/generic_modules_files.mk
+# --------------
+
+# -- MODELSIM Configuration --
+vsim=
+vlib=
+vmap=
+vcom=
+vlog=
+# ----------------------------
+
+# -- PROJECT Configuration --
+ROOT=$(PWD)/..
+PROJECT_NAME=
+# ---------------------------
+
+# -- SCENARII Configuration --
+SCN_LIB_DIR=
+# ----------------------------
+
+# -- SIMULATION Configuration --
+RTL_Testbench_path=
+HDL_SIMU_PATH=
+WORK_DIR=
+LIB_TB_TOP=
+NO_WLF=OFF
+GUI=ON
+TRANSCRIPT_EN=ON
+DO_FILES_EN=ON
+# ------------------------------
+
+
+# -- Compilation Configuration --
+VCOM_ARGS+=
+VLOG_ARGS+=
+# -------------------------------
+
+
+
+# == DESIGN LIBRARIES ==
+
+# ======================
+
+# == TESTBENCH LIBRARIES ==
+
+# =========================
+
+# ==  LIB LIST ==
+LIB_LIST+=
+# ================
+
+
+
+all: 
+	@echo "# =========================== #"
+	@echo "# Makefile for {} blocks tests"
+	@echo "# =========================== #"
+	@echo ""
+	@echo ""
+	
+
+
+
+# == DESIGN VHD FILE LIST ==
+
+# ==========================
+
+# == TESTBENCH UART V FILES LIST ==
+
+# =================================
+
+
+# == Specific Testbench File List ==
+src_tb_lib_uart_display_ctrl_v+=$(TB_SRC_DIR)/XXXXXXX/testbench_setup.sv
+src_tb_lib_uart_display_ctrl_v+=$(TB_SRC_DIR)/XXXXXXX/clk_gen.sv
+src_tb_lib_uart_display_ctrl_v+=$(TB_SRC_DIR)/XXXXXXX/tb_top.sv
+# ==================================
+
+
+## == COMPILE DESIGN == ##
+
+
+
+## == COMPILE TESTBENCH == ##
+
+
+compile_generic_tb_v_files:
+	make compile_tb_v_files SRC_TB_V="$(GEN_MODULE_LIST)" TB_LIB_TOP=$(LIB_TB_TOP)
+
+# =======================
+
+
+# == SCENARII LIST ======
+SCN_LIST+=
+# =======================
+
+# == LIB ARGS ==
+LIB_ARGS=-L lib_max7219_controller -L lib_uart_display_ctrl
+# ==============
+
+
+# == RUN TEST ==
+run_tb_uart_display_ctrl:
+	make run_test TRANSCRIPT_EN=ON DO_FILES_EN=ON
+# ==============
+
