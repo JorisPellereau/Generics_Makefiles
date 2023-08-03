@@ -1,6 +1,6 @@
 # ========================================== #
 #
-# Makefile for 
+# Makefile for {0}
 #
 # ========================================== #
 # Author  : 
@@ -10,8 +10,8 @@
 # ========================================== #
 
 # -- INCLUDES --
-include ~/Generics_Makefiles/Makefiles/MakefileGeneric
-include ~/RTL_Testbench/scripts/makefiles/generic_modules_files.mk
+include ~/Documents/GitHub/Generics_Makefiles/Makefiles/MakefileGeneric
+include ~/Documents/GitHub/RTL_Testbench/scripts/makefiles/generic_modules_files.mk
 # --------------
 
 # -- MODELSIM Configuration --
@@ -24,7 +24,7 @@ vlog=
 
 # -- PROJECT Configuration --
 ROOT=$(PWD)/..
-PROJECT_NAME=
+PROJECT_NAME={0}
 # ---------------------------
 
 # -- SCENARII Configuration --
@@ -32,9 +32,9 @@ SCN_LIB_DIR=
 # ----------------------------
 
 # -- SIMULATION Configuration --
-RTL_Testbench_path=
-HDL_SIMU_PATH=
-WORK_DIR=
+RTL_Testbench_path=~/RTL_Testbench
+HDL_SIMU_PATH=TBD_PATH
+WORK_DIR=TBD_WORK
 LIB_TB_TOP=
 NO_WLF=OFF
 GUI=ON
@@ -59,14 +59,14 @@ VLOG_ARGS+=
 # =========================
 
 # ==  LIB LIST ==
-LIB_LIST+=
+LIB_LIST+=lib_TBD
 # ================
 
 
 
 all: 
 	@echo "# =========================== #"
-	@echo "# Makefile for {} blocks tests"
+	@echo "# Makefile for {0} blocks tests"
 	@echo "# =========================== #"
 	@echo ""
 	@echo ""
@@ -75,7 +75,8 @@ all:
 
 
 # == DESIGN VHD FILE LIST ==
-
+include TBD_files.mk
+lib_TBD_path=TBD_path
 # ==========================
 
 # == TESTBENCH UART V FILES LIST ==
@@ -84,36 +85,44 @@ all:
 
 
 # == Specific Testbench File List ==
-src_tb_lib_uart_display_ctrl_v+=$(TB_SRC_DIR)/XXXXXXX/testbench_setup.sv
-src_tb_lib_uart_display_ctrl_v+=$(TB_SRC_DIR)/XXXXXXX/clk_gen.sv
-src_tb_lib_uart_display_ctrl_v+=$(TB_SRC_DIR)/XXXXXXX/tb_top.sv
+src_tb_lib_TBD_v+=$(TB_SRC_DIR)/tb_lib_TBD/testbench_setup.sv
+src_tb_lib_TBD_v+=$(TB_SRC_DIR)/tb_lib_TBD/clk_gen.sv
+src_tb_lib_TBD_v+=$(TB_SRC_DIR)/tb_lib_TBD/tb_top.sv
 # ==================================
 
 
 ## == COMPILE DESIGN == ##
+compile_TBD:
+	make compile_design_vhd_files SRC_VHD="$(TBD_FILE_LIST)" VHD_DESIGN_LIB=lib_TBD VHD_FILE_PATH=$(lib_TBD_path)
 
-
+# ========================
 
 ## == COMPILE TESTBENCH == ##
 
 
 compile_generic_tb_v_files:
-	make compile_tb_v_files SRC_TB_V="$(GEN_MODULE_LIST)" TB_LIB_TOP=$(LIB_TB_TOP)
+	make compile_tb_v_files SRC_TB_V="$(GEN_MODULE_LIST)" LIB_TB_TOP=tb_lib_TBD V_FILE_PATH=~/Documents/GitHub/
+
+compile_tb_TBD:
+	make compile_tb_v_files SRC_TB_V="$(src_tb_lib_TBD_v)" LIB_TB_TOP=tb_lib_TBD
 
 # =======================
 
+# == COMPILE ALL ==
+compile_all_TBD : clean_all create_simulation_dir libs compile_TBD compile_generic_tb_v_files compile_tb_TBD print_compile_logs_file
+# =================
 
 # == SCENARII LIST ======
-SCN_LIST+=
+SCN_LIST+=TBD_000.py
 # =======================
 
 # == LIB ARGS ==
-LIB_ARGS=-L lib_max7219_controller -L lib_uart_display_ctrl
+LIB_ARGS=-L
 # ==============
 
 
 # == RUN TEST ==
-run_tb_uart_display_ctrl:
-	make run_test TRANSCRIPT_EN=ON DO_FILES_EN=ON
+run_tb_TBD:
+	make run_test TRANSCRIPT_EN=ON DO_FILES_EN=ON SCN_LIB_DIR=scn_lib_TBD LIB_TB_TOP=tb_lib_TBD
 # ==============
 
