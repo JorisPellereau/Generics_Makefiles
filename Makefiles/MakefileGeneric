@@ -208,28 +208,34 @@ create_libs:
 libs:  prepare_libs create_libs
 # ===========================================
 
+# VHD File Path initialized at ""
+VHD_FILE_PATH?=
+
+# V File path initialized at ""
+V_FILE_PATH?=
+
 # == COMPILE VHD-V Files ==
 compile_tb_vhd_files:
 	cd $(HDL_SIMU_PATH)/$(PROJECT_NAME)/$(WORK_DIR); \
-	$(foreach list,$(SRC_TB_VHD),$(vcom) $(VCOM_ARGS) -work $(TB_LIB_TOP) $(list) >> $(COMPILE_LOGS_FILE);)\
+	$(foreach list,$(SRC_TB_VHD),$(vcom) $(VCOM_ARGS) -work $(LIB_TB_TOP) $(VHD_FILE_PATH)$(list) >> $(COMPILE_LOGS_FILE);)\
 
 compile_tb_v_files:
 	cd $(HDL_SIMU_PATH)/$(PROJECT_NAME)/$(WORK_DIR); \
-	$(foreach list,$(SRC_TB_V),$(vlog) $(VLOG_ARGS) -work $(TB_LIB_TOP) $(list) >> $(COMPILE_LOGS_FILE);)\
+	$(foreach list,$(SRC_TB_V),$(vlog) $(VLOG_ARGS) -work $(LIB_TB_TOP) $(V_FILE_PATH)$(list) >> $(COMPILE_LOGS_FILE);)\
 
 compile_design_vhd_files:
 	cd $(HDL_SIMU_PATH)/$(PROJECT_NAME)/$(WORK_DIR); \
-	$(foreach list,$(SRC_VHD),$(vcom) $(VCOM_ARGS) -work $(VHD_DESIGN_LIB) $(list) >> $(COMPILE_LOGS_FILE);)\
+	$(foreach list,$(SRC_VHD),$(vcom) $(VCOM_ARGS) -work $(VHD_DESIGN_LIB) $(VHD_FILE_PATH)$(list) >> $(COMPILE_LOGS_FILE);)\
 
 compile_design_v_files:
 	cd $(HDL_SIMU_PATH)/$(PROJECT_NAME)/$(WORK_DIR); \
-	$(foreach list,$(SRC_V),$(vlog) $(VLOG_ARGS) -work $(V_DESIGN_LIB) $(list) >> $(COMPILE_LOGS_FILE);)\
+	$(foreach list,$(SRC_V),$(vlog) $(VLOG_ARGS) -work $(V_DESIGN_LIB) $(V_FILE_PATH)$(list) >> $(COMPILE_LOGS_FILE);)\
 # ========================
 
 # == COMPILE ALL ==
 # compile_design and compile_testbench rules must be define in user Makefile
-compile_all : clean_all create_simulation_dir libs compile_design compile_testbench
-	make print_compile_logs_file
+#compile_all : clean_all create_simulation_dir libs compile_design compile_testbench
+#	make print_compile_logs_file
 # =================
 
 # == RUN VSIM TEST ==

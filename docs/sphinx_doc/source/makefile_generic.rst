@@ -22,5 +22,6 @@ Generic Makefile Description
    *  OSVVM HTML Check ?
    *  Check one test description
    *  Run Multiple test
+   *  RTL TESTBENCH PATH
 
 
