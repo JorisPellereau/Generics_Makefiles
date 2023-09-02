@@ -12,27 +12,28 @@ STA=$(QUARTUS_PATH)/quartus_sta
 PGM=$(QUARTUS_PATH)/quartus_pgm
 
 
-Q_PROJECT_NAME?=
+
 Q_PROJECT_PATH?=
 REVISION?=
 FAMILY?=CYCLONEIV
 DEVICE?=EP4CE115F29C7
 TOP_ENTITY?=
 
-
+# The name of the project is equals to the TOP_ENTITY
+Q_PROJECT_NAME=$(TOP_ENTITY)
 
 
 # == SH Configuration and ARGS ==
 
 SH_ARGS+=
+SH_SCRIPTS_ARGS+=
 
-ifeq ($(EN_SH_SCRIPT), ON)
-     SH_ARGS+=-t $(SH_SCRIPT)
-endif
 
 SH_ARGS+=--prepare -r $(REVISION) -f $(FAMILY) -d $(DEVICE) -t $(TOP_ENTITY)
 
-
+ifeq ($(EN_SH_SCRIPT), ON)
+     SH_SCRIPTS_ARGS+=-t $(SH_SCRIPT)
+endif
 
 # ===============================
 
@@ -165,7 +166,7 @@ endif
 
 # == ASM Configuration and Args ==
 
-READ_SETTINGS_FILES=on
+READ_SETTINGS_FILES?=on
 ASM_ARGS+=
 
 ASM_ARGS+=--read_settings_files=$(READ_SETTINGS_FILES)
@@ -174,23 +175,37 @@ ASM_ARGS+=--read_settings_files=$(READ_SETTINGS_FILES)
 
 # == STA Configuration and ARGS ==
 
-MODEL=slow
-MULTICORNER=on
-SDC_FILE=
-SPEED=
-TEMPERATURE_IN_C=25
-VOLTAGE=
+MODEL?=slow
+MULTICORNER?=on
+SDC_FILE?=
+
+# Speed Grade of the FPGA
+SPEED?=
+TEMPERATURE_IN_C?=25
+VOLTAGE?=
 
 STA_ARGS+=
 
 STA_ARGS+=--do_report_timing
-STA_ARGS+=--model=$(MODEL)
-STA_ARGS+=--multicorner=$(MULTICORNER)
-STA_ARGS+=--post_map
+
+
+#STA_ARGS+=--post_map
 STA_ARGS+=--sdc=$(SDC_FILE)
 STA_ARGS+=--speed=$(SPEED)
-STA_ARGS+=--temperature=$(TEMPERATURE_IN_C)
-STA_ARGS+=--voltage=$(VOLTAGE)
+
+
+# If ON add multicorner
+ifeq ($(MULTICORNER), ON)
+     STA_ARGS+=--multicorner=on
+endif
+
+# If OFF enable Voltage  and Temperature and not multicorner
+ifeq ($(MULTICORNER), OFF)
+     STA_ARGS+=--voltage=$(VOLTAGE)
+     STA_ARGS+=--temperature=$(TEMPERATURE_IN_C)
+     STA_ARGS+=--model=$(MODEL)
+endif
+
 
 # Force Delay Annotation
 ifeq ($(FORCE_DAT), ON)
@@ -216,16 +231,16 @@ endif
 # ================================
 
 # == TAN Configuration and ARGS ==
-CHECK_CONSTRAINTS=both
-COMBINED_MODEL=on
-DATASHEET_FILE_NAME=
-DO_MIN_ANALYSIS=on
-FAST_MODEL=on
-TAO_FILE_NAME=
-TCO_TIME_TAN=
-TH_TIME_TAN=
-TPD_TIME_TAN=
-TSU_TIME_TAN=
+CHECK_CONSTRAINTS?=both
+COMBINED_MODEL?=on
+DATASHEET_FILE_NAME?=
+DO_MIN_ANALYSIS?=on
+FAST_MODEL?=on
+TAO_FILE_NAME?=
+TCO_TIME_TAN?=
+TH_TIME_TAN?=
+TPD_TIME_TAN?=
+TSU_TIME_TAN?=
 
 TAN_ARGS+=
 TAN_ARGS+=--check_constraints=$(CHECK_CONSTRAINTS)
@@ -237,7 +252,7 @@ TAN_ARGS+=--fast_model=$(FAST_MODEL)
 TAN_ARGS+=--fmax=$(FMAX)
 TAN_ARGS+=--post_map
 TAN_ARGS+=--speed=$(SPEED)
-TAN_ARGS+=--toa=$(TAO_FILE_NAME)
+TAN_ARGS+=--tao=$(TAO_FILE_NAME)
 TAN_ARGS+=--tao_summary
 TAN_ARGS+=--tco=$(TCO_TIME_TAN)
 TAN_ARGS+=--th=$(TH_TIME_TAN)
@@ -304,41 +319,53 @@ qclean:
 
 # Quartus Shell - Use for the preparation of the project
 qsh:
-	cd $(Q_PROJECT_PATH);\
-	$(SH) $(SH_ARGS) $(Q_PROJECT_NAME)
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	$(SH) $(SH_ARGS) $(Q_PROJECT_NAME);\
 
+qsh_script:
+	cd $(Q_PROJECT_PATH);\
+	$(SH) $(SH_SCRIPTS_ARGS);\
 
 # Run Quartus Map - Analysis and Synthesis
 qmap:
-	cd $(Q_PROJECT_PATH);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(MAP) $(TOP_ENTITY) $(MAP_ARGS)
 
 # Run Quartus Fit - Place & Route
 qfit:
-	cd $(Q_PROJECT_PATH);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(FIT) $(TOP_ENTITY) $(FIT_ARGS)
 
 # Run Assembler - Generate Device Programming image
 qasm:
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(ASM) $(Q_PROJECT_NAME) $(ASM_ARGS)
 
 # Run Quarts sta - Timing Analyzer
 qsta:
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(STA) $(Q_PROJECT_NAME) $(STA_ARGS)
 
+qsta_post_map:
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	$(STA) $(Q_PROJECT_NAME) --sdc=$(SDC_FILE) --post_map --do_report_timing
+
 # Run Quartus Tan - Timing Analyzer
+# Pas dans la version lite
 qtan:
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(TAN) $(Q_PROJECT_NAME) $(TAN_ARGS)
 
 
 # Run Quartus PGM - Altera Programming Device
 qpgm:
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(PGM) $(PGM_ARGS) $(Q_PROJECT_NAME)
 
 
 
-qall:
-	cd $(Q_PROJECT_PATH);\
-	$(SH) $(SH_ARGS) $(Q_PROJECT_NAME);\
-	$(MAP) $(TOP_ENTITY) $(MAP_ARGS);\
-	$(FIT) $(TOP_ENTITY) $(FIT_ARGS)
+#qall:
+#	cd $(Q_PROJECT_PATH);\
+#	$(SH) $(SH_ARGS) $(Q_PROJECT_NAME);\
+#	$(MAP) $(TOP_ENTITY) $(MAP_ARGS);\
+#	$(FIT) $(TOP_ENTITY) $(FIT_ARGS)
