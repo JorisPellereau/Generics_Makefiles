@@ -26,14 +26,14 @@ Q_PROJECT_NAME=$(TOP_ENTITY)
 # == SH Configuration and ARGS ==
 
 SH_ARGS+=
-SH_SCRIPTS_ARGS+=
-
+SH_SCRIPTS_ARGS?=
+SH_SCRIPT?=
 
 SH_ARGS+=--prepare -r $(REVISION) -f $(FAMILY) -d $(DEVICE) -t $(TOP_ENTITY)
 
-ifeq ($(EN_SH_SCRIPT), ON)
-     SH_SCRIPTS_ARGS+=-t $(SH_SCRIPT)
-endif
+#ifeq ($(EN_SH_SCRIPT), ON)
+SH_SCRIPTS_ARGS+=-t $(SH_SCRIPT)
+#endif
 
 # ===============================
 
@@ -323,7 +323,7 @@ qsh:
 	$(SH) $(SH_ARGS) $(Q_PROJECT_NAME);\
 
 qsh_script:
-	cd $(Q_PROJECT_PATH);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(SH) $(SH_SCRIPTS_ARGS);\
 
 # Run Quartus Map - Analysis and Synthesis
@@ -346,9 +346,10 @@ qsta:
 	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(STA) $(Q_PROJECT_NAME) $(STA_ARGS)
 
+# remove : --sdc=$(SDC_FILE)
 qsta_post_map:
 	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
-	$(STA) $(Q_PROJECT_NAME) --sdc=$(SDC_FILE) --post_map --do_report_timing
+	$(STA) $(Q_PROJECT_NAME) --post_map --do_report_timing
 
 # Run Quartus Tan - Timing Analyzer
 # Pas dans la version lite
@@ -362,6 +363,14 @@ qpgm:
 	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
 	$(PGM) $(PGM_ARGS) $(Q_PROJECT_NAME)
 
+
+
+# == ERROR SEARCHER ==
+get_map_error_warn:
+	grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)/*.map.*
+
+get_fit_error_warn:
+	grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)/*.fit.*
 
 
 #qall:
