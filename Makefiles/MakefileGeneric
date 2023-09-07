@@ -4,8 +4,9 @@ TB_SRC_DIR=$(ROOT)/tb_sources
 
 # == PROJECT DIRECTORIES ==
 SCRIPTS_DIR=$(ROOT)/scripts
-RUN_DO_DIR=$(ROOT)/do_files/run_files
-WAVES_DO_DIR=$(ROOT)/do_files/waves
+DO_FILES_DIR=$(ROOT)/do_files
+RUN_DO_DIR=$(DO_FILES_DIR)/run_files
+WAVES_DO_DIR=$(DO_FILES_DIR)/waves
 SCN_DIR=$(ROOT)/scenarios
 SRC_DIR=$(ROOT)/sources
 
