@@ -10,6 +10,8 @@ TAN=$(QUARTUS_PATH)/quartus_tan
 ASM=$(QUARTUS_PATH)/quartus_asm
 STA=$(QUARTUS_PATH)/quartus_sta
 PGM=$(QUARTUS_PATH)/quartus_pgm
+CPF=$(QUARTUS_PATH)/quartus_cpf
+STP=$(QUARTUS_PATH)/quartus_stp
 
 
 
@@ -285,17 +287,25 @@ endif
 
 # == PGM Configuration and ARGS ==
 
-CABLE_NAME="cable_"
-PROGRAMMING_MODE=
-PROGRAMMING_OPERATION=
+CUSTOM_PGM_ARGS?=
+
+CABLE_NAME?=
+PROGRAMMING_MODE?=
+PROGRAMMING_OPERATION?=
 
 PGM_ARGS+=
-PGM_ARGS+=--c=$(CABLE_NAME)
-PGM_ARGS+=--m=$(PROGRAMMING_MODE)
-PGM_ARGS+=--o=$(PROGRAMMING_OPERATION)
+
+ifeq ($(CUSTOM_PGM_ARGS), OFF)
+     PGM_ARGS+=--cable=$(CABLE_NAME)
+     PGM_ARGS+=--mode=$(PROGRAMMING_MODE)
+     PGM_ARGS+=-o $(PROGRAMMING_OPERATION)
+endif
 
 # ================================
 
+# == CPF Configuration and ARGS ==
+CPF_ARGS?=
+# ================================
 
 # ==  COMMON OPTIONS ==
 # PARALLEL Configuration - Use All PROCESSORS
@@ -361,10 +371,14 @@ qtan:
 # Run Quartus PGM - Altera Programming Device
 qpgm:
 	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
-	$(PGM) $(PGM_ARGS) $(Q_PROJECT_NAME)
+	$(PGM) $(PGM_ARGS)
 
 
 
+# Run Quartus CPF - Convert Programming Files
+qcpf:
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	$(CPF) $(CPF_ARGS)
 # == ERROR SEARCHER ==
 get_map_error_warn:
 	grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)/*.map.*
@@ -372,6 +386,9 @@ get_map_error_warn:
 get_fit_error_warn:
 	grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)/*.fit.*
 
+
+stp:
+	$(STP) -t test.tcl
 
 #qall:
 #	cd $(Q_PROJECT_PATH);\
