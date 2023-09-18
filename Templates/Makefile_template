@@ -85,9 +85,12 @@ lib_TBD_path=TBD_path
 
 
 # == Specific Testbench File List ==
-src_tb_lib_TBD_v+=$(TB_SRC_DIR)/tb_lib_TBD/testbench_setup.sv
-src_tb_lib_TBD_v+=$(TB_SRC_DIR)/tb_lib_TBD/clk_gen.sv
-src_tb_lib_TBD_v+=$(TB_SRC_DIR)/tb_lib_TBD/tb_top.sv
+
+src_tb_lib_TBD_path=$(TB_SRC_DIR)/tb_lib_TBD/
+
+src_tb_lib_TBD_v+=testbench_setup.sv
+src_tb_lib_TBD_v+=clk_gen.sv
+src_tb_lib_TBD_v+=tb_top.sv
 # ==================================
 
 
@@ -104,7 +107,7 @@ compile_generic_tb_v_files:
 	make compile_tb_v_files SRC_TB_V="$(GEN_MODULE_LIST)" LIB_TB_TOP=tb_lib_TBD V_FILE_PATH=~/Documents/GitHub/
 
 compile_tb_TBD:
-	make compile_tb_v_files SRC_TB_V="$(src_tb_lib_TBD_v)" LIB_TB_TOP=tb_lib_TBD
+	make compile_tb_v_files SRC_TB_V="$(src_tb_lib_TBD_v)" LIB_TB_TOP=tb_lib_TBD V_FILE_PATH=$(src_tb_lib_TBD_path)
 
 # =======================
 
