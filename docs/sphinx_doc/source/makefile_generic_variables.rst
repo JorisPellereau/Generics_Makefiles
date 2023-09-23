@@ -67,6 +67,10 @@ Variable a definir dans un Makefile
 +----------------------+--------------------------------------------------------------------------------------+
 | V_FILE_PATH          | The path of the Verilog/SystemVerilog sources to compile                             |
 +----------------------+--------------------------------------------------------------------------------------+
+| RTL_Testbench_path   | The path of the RTL_Testbench folder                                                 |
++----------------------+--------------------------------------------------------------------------------------+
+| INC_DIR_TB_EN        | Enable to add +incdir+ directive for the Generic Testbench                           |
++----------------------+--------------------------------------------------------------------------------------+
 
 
 Variables reutilisable

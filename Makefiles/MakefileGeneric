@@ -17,6 +17,11 @@ LOGS_DIR=$(HDL_SIMU_PATH)/$(PROJECT_NAME)/LOGS
 COMPILE_LOGS_FILE=$(LOGS_DIR)/compilation.log
 # =========================
 
+# == GENERIC Testbench Configuratrion ==
+RTL_Testbench_path?=
+INC_DIR_TB_EN?=OFF
+# ======================================
+
 # == Config. ARGS by DEFAULT ==
 VSIM_ARGS+=-t ps -default_radix hexadecimal -fsmdebug -title $(TEST)
 VSIM_G_ARGS+=-G/tb_top/SCN_FILE_PATH=$(SCN_TXT_DIR)/$(TEST).txt
@@ -63,7 +68,11 @@ ifeq ($(PERMIT_UNMATCHED_VIRTUAL_INTF), ON)
 endif
 # ======================
 
-
+# == TESTBENCH VLOG ARGS ==
+ifeq ($(INC_DIR_TB_EN), ON)
+  VLOG_ARGS=$(foreach list,$(TB_MODULES_LIB_PATH),+incdir+$(RTL_Testbench_path)$(list))
+endif
+# =========================
 
 
 print_generic_rules:
