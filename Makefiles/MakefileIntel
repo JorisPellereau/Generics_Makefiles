@@ -24,6 +24,8 @@ TOP_ENTITY?=
 # The name of the project is equals to the TOP_ENTITY
 Q_PROJECT_NAME=$(TOP_ENTITY)
 
+# Add a Suffix Name if needed after the Q_PROJECT_PATH
+Q_PROJECT_NAME_SUFFIX?=
 
 # == SH Configuration and ARGS ==
 
@@ -329,62 +331,62 @@ qclean:
 
 # Quartus Shell - Use for the preparation of the project
 qsh:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(SH) $(SH_ARGS) $(Q_PROJECT_NAME);\
 
 qsh_script:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(SH) $(SH_SCRIPTS_ARGS);\
 
 # Run Quartus Map - Analysis and Synthesis
 qmap:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(MAP) $(TOP_ENTITY) $(MAP_ARGS)
 
 # Run Quartus Fit - Place & Route
 qfit:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(FIT) $(TOP_ENTITY) $(FIT_ARGS)
 
 # Run Assembler - Generate Device Programming image
 qasm:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(ASM) $(Q_PROJECT_NAME) $(ASM_ARGS)
 
 # Run Quarts sta - Timing Analyzer
 qsta:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(STA) $(Q_PROJECT_NAME) $(STA_ARGS)
 
 # remove : --sdc=$(SDC_FILE)
 qsta_post_map:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(STA) $(Q_PROJECT_NAME) --post_map --do_report_timing
 
 # Run Quartus Tan - Timing Analyzer
 # Pas dans la version lite
 qtan:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(TAN) $(Q_PROJECT_NAME) $(TAN_ARGS)
 
 
 # Run Quartus PGM - Altera Programming Device
 qpgm:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(PGM) $(PGM_ARGS)
 
 
 
 # Run Quartus CPF - Convert Programming Files
 qcpf:
-	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME);\
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(CPF) $(CPF_ARGS)
 # == ERROR SEARCHER ==
 get_map_error_warn:
-	grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)/*.map.*
+	@grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX)/*.map.*
 
 get_fit_error_warn:
-	grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)/*.fit.*
+	@grep -Ern '^Warn|^Critical' $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX)/*.fit.*
 
 
 stp:
