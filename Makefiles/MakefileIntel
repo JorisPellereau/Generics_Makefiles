@@ -179,6 +179,9 @@ ASM_ARGS+=--read_settings_files=$(READ_SETTINGS_FILES)
 
 # == STA Configuration and ARGS ==
 
+# Enable read STA SCRIPT
+EN_STA_SCRIPT?=OFF
+
 MODEL?=slow
 MULTICORNER?=on
 SDC_FILE?=
@@ -190,13 +193,12 @@ VOLTAGE?=
 
 STA_ARGS+=
 
-STA_ARGS+=--do_report_timing
-
-
-#STA_ARGS+=--post_map
-STA_ARGS+=--sdc=$(SDC_FILE)
-STA_ARGS+=--speed=$(SPEED)
-
+# Enable args if EN_STA_SCRIPT is disable
+ifeq ($(EN_STA_SCRIPT), OFF)
+     STA_ARGS+=--do_report_timing
+     STA_ARGS+=--sdc=$(SDC_FILE)
+     STA_ARGS+=--speed=$(SPEED)
+endif
 
 # If ON add multicorner
 ifeq ($(MULTICORNER), ON)
@@ -357,6 +359,10 @@ qasm:
 qsta:
 	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
 	$(STA) $(Q_PROJECT_NAME) $(STA_ARGS)
+
+qsta_script:
+	cd $(Q_PROJECT_PATH)/$(Q_PROJECT_NAME)$(Q_PROJECT_NAME_SUFFIX);\
+	$(STA) $(STA_ARGS)
 
 # remove : --sdc=$(SDC_FILE)
 qsta_post_map:
