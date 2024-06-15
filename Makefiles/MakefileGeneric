@@ -198,8 +198,9 @@ clean_logs:
 clean_all:
 	if [ -d $(HDL_SIMU_PATH)/$(PROJECT_NAME) ]; then \
 	   cd $(HDL_SIMU_PATH)/$(PROJECT_NAME); \
-	   rm -rRf *;
+	   rm -rRf *; \
 	fi
+
 # ======================
 
 
